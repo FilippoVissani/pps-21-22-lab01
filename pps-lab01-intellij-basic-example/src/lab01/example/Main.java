@@ -8,7 +8,7 @@ public class Main {
 
     public static void main(String[] args) {
         final AccountHolder accountHolder = new AccountHolder("Mario", "Rossi", 1);
-        final BankAccount bankAccount = new SimpleBankAccount(accountHolder, 0);
+        final BankAccount bankAccount = new SimpleBankAccount(0, accountHolder);
 
         bankAccount.deposit(accountHolder.getId(), 100);
 
