@@ -1,6 +1,5 @@
 import lab01.example.model.AccountHolder;
 import lab01.example.model.BankAccount;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -42,13 +41,13 @@ public abstract class AbstractSimpleBankAccountTest {
     @Test
     void testInitialBalance() {
         int expectedBalance = 0;
-        Assertions.assertEquals(expectedBalance, bankAccount.getBalance());
+        assertEquals(expectedBalance, bankAccount.getBalance());
     }
 
     @Test
     void testDeposit() {
         bankAccount.deposit(accountHolder.getId(), DEPOSIT_AMOUNT);
-        Assertions.assertEquals(DEPOSIT_AMOUNT, bankAccount.getBalance());
+        assertEquals(DEPOSIT_AMOUNT, bankAccount.getBalance());
     }
 
     @Test
@@ -57,7 +56,7 @@ public abstract class AbstractSimpleBankAccountTest {
         int depositAmount = 50;
         bankAccount.deposit(accountHolder.getId(), DEPOSIT_AMOUNT);
         bankAccount.deposit(userID, depositAmount);
-        Assertions.assertEquals(DEPOSIT_AMOUNT, bankAccount.getBalance());
+        assertEquals(DEPOSIT_AMOUNT, bankAccount.getBalance());
     }
 
     abstract int getFee();
