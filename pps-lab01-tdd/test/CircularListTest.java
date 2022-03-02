@@ -52,8 +52,10 @@ public class CircularListTest {
 
     @Test
     void testNextNotOutOfBound(){
+        int expectedValue = 1;
         addElementToList();
-        int expectedValue = 0;
+        addElementToList();
+        circularList.next();
         Assertions.assertEquals(expectedValue, circularList.next().get());
     }
 
@@ -71,10 +73,11 @@ public class CircularListTest {
 
     @Test
     void testPreviousNotOutOfBound(){
-        int expectedValue = 0;
+        int expectedValue = 1;
         addElementToList();
         addElementToList();
         addElementToList();
+        circularList.next();
         circularList.next();
         Assertions.assertEquals(expectedValue, circularList.previous().get());
     }
