@@ -1,5 +1,6 @@
 import lab01.tdd.CircularList;
 import lab01.tdd.CircularListImpl;
+import lab01.tdd.SelectStrategy;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -53,14 +54,14 @@ public class CircularListTest {
     void testNextNotOutOfBound(){
         int expectedValue = 2;
         fillList(3);
-        Assertions.assertEquals(expectedValue, nextNTimes(3).get());
+        Assertions.assertEquals(expectedValue, nextNTimes(3));
     }
 
     @Test
     void testNextOutOfBound(){
         int expectedValue = 0;
         fillList(3);
-        Assertions.assertEquals(expectedValue, nextNTimes(4).get());
+        Assertions.assertEquals(expectedValue, nextNTimes(4));
     }
 
     @Test
@@ -68,14 +69,14 @@ public class CircularListTest {
         int expectedValue = 0;
         fillList(3);
         nextNTimes(2);
-        Assertions.assertEquals(expectedValue, previousNTimes(2).get());
+        Assertions.assertEquals(expectedValue, previousNTimes(2));
     }
 
     @Test
     void testPreviousOutOfBound(){
         int expectedValue = 2;
         fillList(3);
-        Assertions.assertEquals(expectedValue, previousNTimes(1).get());
+        Assertions.assertEquals(expectedValue, previousNTimes(1));
     }
 
     @Test
@@ -84,26 +85,77 @@ public class CircularListTest {
         fillList(100);
         nextNTimes(50);
         circularList.reset();
-        Assertions.assertEquals(expectedValue, nextNTimes(1).get());
+        Assertions.assertEquals(expectedValue, nextNTimes(1));
+    }
+
+    @Test
+    void testNextEvenStrategyNotOutOfBound(){
+        int expectedValue = 4;
+        fillList(10);
+        Assertions.assertEquals(expectedValue, nextStrategyNTimes(3, element -> element % 2 == 0));
+    }
+
+    @Test
+    void testNextEvenStrategyOutOfBound(){
+        int expectedValue = 0;
+        fillList(4);
+        Assertions.assertEquals(expectedValue, nextStrategyNTimes(3, element -> element % 2 == 0));
+    }
+
+    @Test
+    void testNextMultipleOfStrategyNotOutOfBound(){
+        int expectedValue = 8;
+        int number = 4;
+        fillList(10);
+        Assertions.assertEquals(expectedValue, nextStrategyNTimes(3, element -> element % number == 0));
+    }
+
+    @Test
+    void testNextMultipleOfStrategyOutOfBound(){
+        int expectedValue = 4;
+        int number = 4;
+        fillList(10);
+        Assertions.assertEquals(expectedValue, nextStrategyNTimes(5, element -> element % number == 0));
+    }
+
+    @Test
+    void testNextEqualsStrategyNotOutOfBound(){
+        int expectedValue = 9;
+        fillList(10);
+        Assertions.assertEquals(expectedValue, nextStrategyNTimes(1, element -> element == expectedValue));
+    }
+
+    @Test
+    void testNextEqualsStrategyOutOfBound(){
+        int expectedValue = 9;
+        fillList(10);
+        Assertions.assertEquals(expectedValue, nextStrategyNTimes(2, element -> element == expectedValue));
     }
 
     private void fillList(int size){
         for (int i = 0; i < size; i++){
-            circularList.add(i % 3);
+            circularList.add(i % 10);
         }
     }
 
-    private Optional<Integer> nextNTimes(int step){
+    private Integer nextNTimes(int step){
         for (int i = 0; i < step - 1; i++){
             circularList.next();
         }
-        return circularList.next();
+        return circularList.next().get();
     }
 
-    private Optional<Integer> previousNTimes(int step){
+    private Integer nextStrategyNTimes(int step, SelectStrategy strategy){
+        for (int i = 0; i < step - 1; i++){
+            circularList.next(strategy);
+        }
+        return circularList.next(strategy).get();
+    }
+
+    private Integer previousNTimes(int step){
         for (int i = 0; i < step - 1; i++){
             circularList.previous();
         }
-        return circularList.previous();
+        return circularList.previous().get();
     }
 }
