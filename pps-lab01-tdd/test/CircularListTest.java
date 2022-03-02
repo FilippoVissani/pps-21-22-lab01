@@ -1,6 +1,4 @@
-import lab01.tdd.CircularList;
-import lab01.tdd.CircularListImpl;
-import lab01.tdd.SelectStrategy;
+import lab01.tdd.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -91,45 +89,51 @@ public class CircularListTest {
     @Test
     void testNextEvenStrategyNotOutOfBound(){
         int expectedValue = 4;
+        AbstractSelectStrategyFactory evenStrategyFactory = new EvenSelectStrategyFactory();
         fillList(10);
-        Assertions.assertEquals(expectedValue, nextStrategyNTimes(3, element -> element % 2 == 0));
+        Assertions.assertEquals(expectedValue, nextStrategyNTimes(3, evenStrategyFactory.getSelectStrategy(Optional.empty()).get()));
     }
 
     @Test
     void testNextEvenStrategyOutOfBound(){
         int expectedValue = 0;
+        AbstractSelectStrategyFactory evenStrategyFactory = new EvenSelectStrategyFactory();
         fillList(4);
-        Assertions.assertEquals(expectedValue, nextStrategyNTimes(3, element -> element % 2 == 0));
+        Assertions.assertEquals(expectedValue, nextStrategyNTimes(3, evenStrategyFactory.getSelectStrategy(Optional.empty()).get()));
     }
 
     @Test
     void testNextMultipleOfStrategyNotOutOfBound(){
         int expectedValue = 8;
         int number = 4;
+        AbstractSelectStrategyFactory multipleOfStrategyFactory = new MultipleOfSelectStrategyFactory();
         fillList(10);
-        Assertions.assertEquals(expectedValue, nextStrategyNTimes(3, element -> element % number == 0));
+        Assertions.assertEquals(expectedValue, nextStrategyNTimes(3, multipleOfStrategyFactory.getSelectStrategy(Optional.of(number)).get()));
     }
 
     @Test
     void testNextMultipleOfStrategyOutOfBound(){
         int expectedValue = 4;
         int number = 4;
+        AbstractSelectStrategyFactory multipleOfStrategyFactory = new MultipleOfSelectStrategyFactory();
         fillList(10);
-        Assertions.assertEquals(expectedValue, nextStrategyNTimes(5, element -> element % number == 0));
+        Assertions.assertEquals(expectedValue, nextStrategyNTimes(5, multipleOfStrategyFactory.getSelectStrategy(Optional.of(number)).get()));
     }
 
     @Test
     void testNextEqualsStrategyNotOutOfBound(){
         int expectedValue = 9;
+        AbstractSelectStrategyFactory equalsStrategyFactory = new EqualsSelectStrategyFactory();
         fillList(10);
-        Assertions.assertEquals(expectedValue, nextStrategyNTimes(1, element -> element == expectedValue));
+        Assertions.assertEquals(expectedValue, nextStrategyNTimes(1, equalsStrategyFactory.getSelectStrategy(Optional.of(expectedValue)).get()));
     }
 
     @Test
     void testNextEqualsStrategyOutOfBound(){
         int expectedValue = 9;
+        AbstractSelectStrategyFactory equalsStrategyFactory = new EqualsSelectStrategyFactory();
         fillList(10);
-        Assertions.assertEquals(expectedValue, nextStrategyNTimes(2, element -> element == expectedValue));
+        Assertions.assertEquals(expectedValue, nextStrategyNTimes(2, equalsStrategyFactory.getSelectStrategy(Optional.of(expectedValue)).get()));
     }
 
     private void fillList(int size){
