@@ -4,23 +4,23 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 /**
  * The test suite for testing the CircularList implementation
  */
 public class CircularListTest {
 
     private CircularList circularList;
-    private int element;
 
     @BeforeEach
     void beforeEach(){
         circularList = new CircularListImpl();
-        element = 0;
     }
 
     @Test
     void testAddElement(){
-        addElementToList();
+        fillList(100);
     }
 
     @Test
@@ -31,9 +31,8 @@ public class CircularListTest {
     
     @Test
     void testSizeNotEmptyList(){
-        int expectedSize = 2;
-        addElementToList();
-        addElementToList();
+        int expectedSize = 100;
+        fillList(expectedSize);
         Assertions.assertEquals(expectedSize, circularList.size());
     }
 
@@ -46,66 +45,65 @@ public class CircularListTest {
     @Test
     void testIsNotEmpty(){
         boolean expectedIsEmpty = false;
-        addElementToList();
+        fillList(100);
         Assertions.assertEquals(expectedIsEmpty, circularList.isEmpty());
     }
 
     @Test
     void testNextNotOutOfBound(){
-        int expectedValue = 1;
-        addElementToList();
-        addElementToList();
-        circularList.next();
-        Assertions.assertEquals(expectedValue, circularList.next().get());
+        int expectedValue = 2;
+        fillList(3);
+        Assertions.assertEquals(expectedValue, nextNTimes(3).get());
     }
 
     @Test
     void testNextOutOfBound(){
         int expectedValue = 0;
-        addElementToList();
-        addElementToList();
-        addElementToList();
-        circularList.next();
-        circularList.next();
-        circularList.next();
-        Assertions.assertEquals(expectedValue, circularList.next().get());
+        fillList(3);
+        Assertions.assertEquals(expectedValue, nextNTimes(4).get());
     }
 
     @Test
     void testPreviousNotOutOfBound(){
-        int expectedValue = 1;
-        addElementToList();
-        addElementToList();
-        addElementToList();
-        circularList.next();
-        circularList.next();
-        Assertions.assertEquals(expectedValue, circularList.previous().get());
+        int expectedValue = 0;
+        fillList(3);
+        nextNTimes(2);
+        Assertions.assertEquals(expectedValue, previousNTimes(2).get());
     }
 
     @Test
     void testPreviousOutOfBound(){
         int expectedValue = 2;
-        addElementToList();
-        addElementToList();
-        addElementToList();
-        Assertions.assertEquals(expectedValue, circularList.previous().get());
+        fillList(3);
+        Assertions.assertEquals(expectedValue, previousNTimes(1).get());
     }
 
     @Test
     void testReset(){
         int expectedValue = 0;
-        addElementToList();
-        addElementToList();
-        addElementToList();
-        circularList.next();
-        circularList.next();
+        fillList(100);
+        nextNTimes(50);
         circularList.reset();
-        Assertions.assertEquals(expectedValue, circularList.next().get());
+        Assertions.assertEquals(expectedValue, nextNTimes(1).get());
     }
 
-    private void addElementToList() {
-        circularList.add(element);
-        element = element + 1;
+    private void fillList(int size){
+        for (int i = 0; i < size; i++){
+            circularList.add(i % 3);
+        }
     }
 
+    private Optional<Integer> nextNTimes(int step){
+        for (int i = 0; i < step - 1; i++){
+            circularList.next();
+        }
+        return circularList.next();
+    }
+
+    private Optional<Integer> previousNTimes(int step){
+        for (int i = 0; i < step - 1; i++){
+            circularList.previous();
+        }
+        return circularList.previous();
+    }
 }
